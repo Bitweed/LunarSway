@@ -1,0 +1,8 @@
+name: LunarSway
+version: '${project.version}'
+main: vendek.lunarsway.LunarSway
+api-version: '1.20'
+
+commands:
+  lsworld:
+    description: "Телепортироваться в другой мир"
