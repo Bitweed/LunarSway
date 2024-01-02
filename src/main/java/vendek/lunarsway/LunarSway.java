@@ -8,7 +8,7 @@ public final class LunarSway extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        getCommand("lsworld").setExecutor(new WorldChanger());
+        getCommand("ls-fly_to").setExecutor(new WorldChanger());
     }
 
     @Override

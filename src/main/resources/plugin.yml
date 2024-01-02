@@ -4,5 +4,5 @@ main: vendek.lunarsway.LunarSway
 api-version: '1.20'
 
 commands:
-  lsworld:
+  ls-fly_to:
     description: "Телепортироваться в другой мир"
