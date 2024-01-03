@@ -6,3 +6,5 @@ api-version: '1.20'
 commands:
   ls-fly_to:
     description: "Телепортироваться в другой мир"
+  ls-summon_meteor:
+    description: "Создать метеор"
