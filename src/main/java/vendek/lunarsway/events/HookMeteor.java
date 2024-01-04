@@ -1,29 +1,16 @@
 package vendek.lunarsway.events;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerFishEvent;
-import org.bukkit.inventory.ItemStack;
+import vendek.lunarsway.DropManager;
+import vendek.lunarsway.LunarSway;
 
-import java.util.Random;
 
 public class HookMeteor implements Listener {
-
-    // Выдача награды игроку.
-    void givePlayerRevard(Player player) {
-        Random random = new Random();
-        int count = random.nextInt(3) + 1;
-        ItemStack itemStack = new ItemStack(Material.COBBLESTONE, count);
-        player.getInventory().addItem(itemStack);
-        player.sendMessage("Вы получили: " + ChatColor.GREEN + "⛏ булыжник " + ChatColor.WHITE + count + "x");
-    }
-
     @EventHandler
     public void onPlayerFish(PlayerFishEvent event) {
         Player player = (Player) event.getPlayer();
@@ -37,7 +24,9 @@ public class HookMeteor implements Listener {
                 FallingBlock fallingBlock = (FallingBlock) caughtEntity;
                 fallingBlock.remove();
 
-                givePlayerRevard(player);
+                DropManager dropManager = new DropManager(LunarSway.getInstance());
+                dropManager.dropRandomItem(player);
+
             }
         }
     }

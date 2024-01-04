@@ -15,6 +15,7 @@ import java.util.Random;
 public final class LunarSway extends JavaPlugin {
     private static LunarSway instance;
 
+
     @Override
     public void onEnable() {
         instance = this;
@@ -28,8 +29,8 @@ public final class LunarSway extends JavaPlugin {
 
 
         Random random = new Random();
-        int minTicks = 200; // Минимальное количество тиков (10 секунд)
-        int maxTicks = 480; // Максимальное количество тиков (24 секунд)
+        int minTicks = 20; // Минимальное количество тиков (1 секунд)
+        int maxTicks = 200; // Максимальное количество тиков (10 секунд)
         int interval = random.nextInt(maxTicks - minTicks + 1) + minTicks;
         TaskSpawnMeteor spawnMeteor = new TaskSpawnMeteor();
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, spawnMeteor, 1, interval);
