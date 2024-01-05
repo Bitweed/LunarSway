@@ -20,7 +20,7 @@ public class TaskSpawnMeteor implements Runnable {
         Random random = new Random();
         int max_pos = 10;
         double x = location.getX() + random.nextInt(max_pos * 2) - max_pos;
-        double z = location.getZ() + max_pos + random.nextInt(max_pos);
+        double z = location.getZ() + max_pos * 1.5 + random.nextInt(max_pos);
         double y = location.getY() + random.nextInt(5 * 2) - 5;
         Location spawnLocation = new Location(location.getWorld(), x, y, z);
 
