@@ -1,47 +1,78 @@
 package vendek.lunarsway.block_events;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
-import org.bukkit.entity.Player;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.Location;
+import org.bukkit.entity.AreaEffectCloud;
+
+import java.util.*;
 
 public class PlaceSmallGreenhouse  implements Listener {
 
+    // HashMap для хранения времени последнего размещения блока для каждого игрока.
+    Map<Player, Long> lastPlacedTimes = new HashMap<>();
+    int placeInterval = 4;
+
+
     @EventHandler
-    public void onBlockPlace(BlockPlaceEvent event) {
-        Player player = event.getPlayer();
-        Block block = event.getBlock();
-        ItemStack item = player.getInventory().getItemInMainHand();
-        Location location = block.getLocation();
+    public void onPlayerInteract(PlayerInteractEvent event) {
+        if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
 
-        // Проверяем, является ли размещенный блок блоком стекла
-        if (block.getType() == Material.GLASS) {
-            // Проверяем название предмета
-            if (item.hasItemMeta() && item.getItemMeta().hasDisplayName() && item.getItemMeta().getDisplayName().equals("Маленькая теплица")) {
-                // Создаем новый невидимый armor_stand на координатах размещения блока
-                ArmorStand armorStand = location.getWorld().spawn(location, ArmorStand.class);
-                // Устанавливаем невидимость armor_stand
-                armorStand.setInvisible(true);
-                armorStand.setInvulnerable(true);
-                // Uuid
-                String entityUuid = armorStand.getUniqueId().toString();
+            Player player = event.getPlayer();
+            ItemStack itemInHand = player.getInventory().getItemInMainHand();
 
-                // Вызываем функцию чата Minecraft с использованием сущности стойки в аргументах
-                String command = "execute at " + entityUuid + " run function lunarsway:place_block/small_greenhouse";
-                Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command);
-
-                // Удаление временной стойки
-                armorStand.remove();
+            // Задержка на установку блока.
+            long currentTime = System.currentTimeMillis();  // Получаем текущее время.
+            if (lastPlacedTimes.containsKey(player)) {
+                long lastPlacedTime = lastPlacedTimes.get(player);
+                // Проверяем, прошло ли достаточно времени с последнего размещения блока для текущего игрока.
+                if (currentTime - lastPlacedTime < placeInterval * 50) {
+                    return;
+                }
             }
-        }
 
+            if (
+                itemInHand.getType() == Material.PAPER &&
+                itemInHand.getItemMeta().hasCustomModelData() &&
+                itemInHand.getItemMeta().getCustomModelData() == 24001
+            )
+            {
+                Block clickedBlock = event.getClickedBlock(); // Блок, на который кликнули.
+                BlockFace clickedFace = event.getBlockFace();  // Грань блока, на которую кликнули.
+                Block placedBlock = clickedBlock.getRelative(clickedFace);  // Блок, который мы устанавливаем.
+
+                List<Material> allowedBlocks = new ArrayList<>(Arrays.asList(Material.AIR, Material.SHORT_GRASS));
+                // Ставим блок только если сверху воздух или трава.
+                if (allowedBlocks.contains(placedBlock.getType())) {
+                    // Установка блока барьера.
+                    placedBlock.setType(Material.BARRIER);
+
+                    // СПАВН АРМОРСТЕНДА.
+                    Location location = placedBlock.getLocation();
+                    ArmorStand tempPlacer = placedBlock.getWorld().spawn(location, ArmorStand.class);
+                    // Получение UUID Area Effect Cloud
+                    String uuid = tempPlacer.getUniqueId().toString();
+                    String command = String.format(
+                            "execute at " + uuid + " run summon armor_stand ~0.5 ~ ~0.5 {Tags:[\"barrier\",\"space_pot\"],Small:1b,NoGravity:1b,Silent:1b,Invulnerable:1b,HasVisualFire:0b,Invisible:1b,ArmorItems:[{},{},{},{id:\"minecraft:paper\",Count:1b,tag:{CustomModelData:24001}}]}"
+                    );
+                    Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), command);
+                    tempPlacer.remove();
+                }
+
+                // Удаляем предмет только если игрок не в креативе.
+                if (player.getGameMode() != GameMode.CREATIVE) {player.getInventory().remove(itemInHand);}
+
+                // Обновляем время последнего размещения блока для текущего игрока.
+                lastPlacedTimes.put(player, currentTime);
+            }
+
+        }
     }
 }
