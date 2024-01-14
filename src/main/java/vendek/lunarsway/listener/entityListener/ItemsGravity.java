@@ -1,4 +1,4 @@
-package vendek.lunarsway.events;
+package vendek.lunarsway.listener.entityListener;
 
 import org.bukkit.entity.Item;
 import org.bukkit.event.EventHandler;

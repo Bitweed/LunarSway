@@ -1,4 +1,4 @@
-package vendek.lunarsway.events;
+package vendek.lunarsway.listener.playerListener;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.FallingBlock;
@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerFishEvent;
-import vendek.lunarsway.DropManager;
+import vendek.lunarsway.manager.DropManager;
 import vendek.lunarsway.LunarSway;
 
 

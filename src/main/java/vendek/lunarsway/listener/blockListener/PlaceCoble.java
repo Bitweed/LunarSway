@@ -1,4 +1,4 @@
-package vendek.lunarsway.events;
+package vendek.lunarsway.listener.blockListener;
 
 import org.bukkit.Material;
 import org.bukkit.event.EventHandler;

@@ -1,4 +1,4 @@
-package vendek.lunarsway;
+package vendek.lunarsway.manager;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

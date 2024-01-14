@@ -1,8 +1,9 @@
-package vendek.lunarsway.events;
+package vendek.lunarsway.listener.playerListener;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -17,6 +18,10 @@ public class CobleFall implements Listener {
         Player player = event.getPlayer();
 
         if (player.isOnGround() && player.getLocation().subtract(0, 1, 0).getBlock().getType() == Material.COBBLESTONE) {
+            Block airBlock = player.getLocation().subtract(0, 1, 0).getBlock().getRelative(0, -1, 0); // Получаем блок под текущим блоком
+            if (airBlock.getType() != Material.AIR) {
+                return;
+            }
             Location first_location = player.getLocation().subtract(0, 1, 0).getBlock().getLocation();
             Bukkit.getScheduler().runTaskLater(LunarSway.getInstance(), () -> {
                 if (first_location.getBlock().getType() != Material.COBBLESTONE) {

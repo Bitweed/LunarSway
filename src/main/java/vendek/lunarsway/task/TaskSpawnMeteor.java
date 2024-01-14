@@ -1,4 +1,4 @@
-package vendek.lunarsway.tasks;
+package vendek.lunarsway.task;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

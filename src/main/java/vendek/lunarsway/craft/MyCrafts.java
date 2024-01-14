@@ -1,4 +1,4 @@
-package vendek.lunarsway;
+package vendek.lunarsway.craft;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -7,6 +7,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
+import vendek.lunarsway.LunarSway;
 
 public class MyCrafts {
     public static void smallGreenHouse() {

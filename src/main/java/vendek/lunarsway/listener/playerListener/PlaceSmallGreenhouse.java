@@ -1,4 +1,4 @@
-package vendek.lunarsway.block_events;
+package vendek.lunarsway.listener.playerListener;
 
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -10,7 +10,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.entity.AreaEffectCloud;
 
 import java.util.*;
 
@@ -67,8 +66,11 @@ public class PlaceSmallGreenhouse  implements Listener {
                 }
 
                 // Удаляем предмет только если игрок не в креативе.
-                if (player.getGameMode() != GameMode.CREATIVE) {player.getInventory().remove(itemInHand);}
-
+                if (player.getGameMode() != GameMode.CREATIVE) {
+                    ItemStack itemToRemove = new ItemStack(itemInHand);
+                    itemToRemove.setAmount(1);
+                    player.getInventory().removeItem(itemToRemove);
+                }
                 // Обновляем время последнего размещения блока для текущего игрока.
                 lastPlacedTimes.put(player, currentTime);
             }
